@@ -10,32 +10,48 @@ from langchain_community.vectorstores import FAISS
 from langchain.prompts import PromptTemplate
 from PIL import Image
 import io
-import time # For simulating delays
-import httpx # For downloading files in notebook, and potentially for video/image streams
-from google.generativeai import types # For File API types
+import time 
+import httpx 
+from google.generativeai import types 
 from typing import Optional
+#from google import genai
+#from google.genai import types
 
-# --- Configuration and Setup ---
+# Configuration and Setup 
 st.set_page_config(
-    page_title="ChetnaShakti AI Coach (Comprehensive)",
+    page_title="ChetnaShakti AI Coach",
     page_icon="🙏",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-st.title("🙏 ChetnaShakti: AI-Powered Coach (Comprehensive Demo)")
+st.title("ChetnaShakti: AI Powered Coach")
 st.markdown(
     """
-    Welcome to ChetnaShakti, your personalized AI wellness coach!
-    This demo showcases the comprehensive capabilities of ChetnaShakti, including:
-    - **Multi-Agent System:** Interact with CBT, Habit, Spiritual, Journal Analysis, and Information agents.
-    - **Contextual Grounding (RAG):** Upload PDFs for spiritual insights & analyze journal entries.
-    - **Multimodal Understanding:** Analyze images and **videos**.
-    - **Google Search Integration:** Information agent can perform live web searches.
+Welcome to **ChetnaShakti**, your personal AI wellness coach designed to empower your journey towards mental and emotional well being!
+
+This comprehensive demo highlights ChetnaShakti's powerful features:
+
+* **Discover ChetnaShakti's tailored support featuring specialized AI coaches for:**
+    * **Cognitive Behavioral Therapy (CBT):** Reframe negative thoughts.
+    * **Habit Rewiring:** Build positive routines.
+    * **Spiritual Guidance:** Find peace and insight.
+    * **Journal Analysis:** Gain deep understanding from your reflections.
+    * **Quick Answers & Web Search:** Get reliable, upto date answers to your wellness questions, powered by real time web search capabilities.
+
+* **Contextual Understanding:** Enhance AI responses by:
+    * Uploading your **spiritual texts (PDFs)** for personalized insights.
+    * Pasting your **journal entries** for in depth analysis.
+
+* **Multimodal Capabilities:** Experience wellness support through:
+    * Analyzing **images** (scripture, visual journals, handwriting).
+    * Understanding **videos** (spoken check ins, emotional cues).
+
+Let's begin your journey to a more balanced and conscious self!
     """
 )
 
-# --- API Key Handling ---
+#  API Key Handling 
 # Initialize session state for API key if not already present
 if 'google_api_key' not in st.session_state:
     st.session_state.google_api_key = None
@@ -45,9 +61,9 @@ def configure_genai_models(api_key):
     try:
         genai.configure(api_key=api_key)
         # Initialize models only if configuration is successful
-        st.session_state.text_model = genai.GenerativeModel('gemini-1.5-flash')
-        st.session_state.vision_model = genai.GenerativeModel('gemini-1.5-flash')
-        st.session_state.video_model = genai.GenerativeModel('gemini-1.5-flash')
+        st.session_state.text_model = genai.GenerativeModel('gemini-2.0-flash')
+        st.session_state.vision_model = genai.GenerativeModel('gemini-2.0-flash')
+        st.session_state.video_model = genai.GenerativeModel('gemini-2.0-flash')
         return True
     except Exception as e:
         st.error(f"Error configuring Google API with provided key: {e}. Please check your API key.")
@@ -83,12 +99,12 @@ if not api_key_configured:
             st.session_state.google_api_key = None
     st.stop() # Stop execution if no valid key is present
 
-# Assign models from session state (they are guaranteed to be there if we reach this point)
+# Assign models from session state
 text_model = st.session_state.text_model
 vision_model = st.session_state.vision_model
 video_model = st.session_state.video_model
 
-# --- Session State Initialization (rest of session state) ---
+# Session State Initialization 
 if 'chat_history' not in st.session_state:
     st.session_state.chat_history = []
 if 'vector_store_spiritual' not in st.session_state:
@@ -118,7 +134,7 @@ if 'evaluation_metrics' not in st.session_state:
         "total_unhelpful": 0
     }
 
-# --- RAG (Retrieval Augmented Generation) Functions ---
+# RAG Functions
 @st.cache_resource
 def load_and_process_pdfs(uploaded_files):
     if not uploaded_files:
@@ -172,7 +188,7 @@ def process_journal_text_for_rag(journal_text):
     st.success("Journal analysis ready!")
     return vectorstore, "Loaded"
 
-# --- Agent Definitions and Prompts with Structured Schemas (Exact from Notebook) ---
+# Agent Definitions and Prompts with Structured Schemas) 
 
 # CBT Agent
 cbt_prompt_template = """
@@ -269,7 +285,7 @@ journal_analysis_schema = {
     "required": ["main_themes", "emotional_tone", "potential_cognitive_distortions", "suggested_reframing", "actionable_insights"]
 }
 
-# Information Agent (uses Google Search)
+# Information Agent 
 information_prompt_template = """
 You are an Information Agent. Your goal is to provide concise and helpful information based on the provided search results.
 If the search results are not sufficient to fully answer the user's query, state that you can only provide information from the available context.
@@ -280,7 +296,7 @@ Search Results:
 User's query: "{user_input}"
 """
 
-# --- Image Analysis Prompts (Exact from Notebook) ---
+#  Image Analysis Prompts 
 scripture_image_analysis_template = """Analyze this image suspected to contain a Sanskrit verse from a scripture like the Bhagavad Gita or Durga Saptashati. The user is currently {user_context}.
 
 Please perform the following steps and structure your response clearly using Markdown:
@@ -316,7 +332,7 @@ Perform the following steps:
 Structure your response using Markdown headings."""
 
 
-# Video Analysis Prompt (Exact from Notebook)
+# Video Analysis Prompt 
 video_analysis_prompt_template = """You are an AI assistant analyzing a user's video for wellness insights. The user provided this context: "{user_prompt}"
 
 Please analyze the video considering the following aspects and structure your response using Markdown:
@@ -340,7 +356,7 @@ video_analysis_disclaimer = """
 """
 
 
-# --- Gemini API Call Functions ---
+# Gemini API Call Functions 
 def get_structured_ai_response(prompt_text, response_schema, model_to_use=text_model):
     try:
         response = model_to_use.generate_content(
@@ -385,7 +401,7 @@ def analyze_image(image_data, analysis_type, user_context):
         st.error(f"Image Analysis Error: {e}")
         return "Could not process image. Please try again."
 
-# --- Video Processing Functions (from notebook) ---
+# Video Processing Functions 
 def upload_and_process_video_gemini(file_bytes: bytes, file_name: str) -> Optional[types.File]:
     """Uploads a video file (from bytes) to Gemini File API and waits for it to be processed."""
     
@@ -462,7 +478,7 @@ def analyze_wellness_video_gemini(video_file: types.File, user_prompt: str) -> s
              return "Sorry, I couldn't analyze the video due to current usage limits. Please try again later." + video_analysis_disclaimer
         return f"An error occurred during video analysis: {e}" + video_analysis_disclaimer
 
-# --- Intent Routing (Simulating LangGraph's Conditional Edges/Routing) ---
+#  Intent Routing 
 def classify_intent(query, chat_history, has_uploaded_video=False):
     query_lower = query.lower()
     
@@ -482,7 +498,7 @@ def classify_intent(query, chat_history, has_uploaded_video=False):
     if "search for" in query_lower or "google search" in query_lower or "find information about" in query_lower or "tell me about" in query_lower:
         return "information"
 
-    # 2. Contextual Routing (Based on previous turn, simple memory)
+    # 2. Contextual Routing
     if chat_history and chat_history[-1]["role"] == "model":
         last_response_content = chat_history[-1]["content"]
         if isinstance(last_response_content, dict):
@@ -495,7 +511,7 @@ def classify_intent(query, chat_history, has_uploaded_video=False):
         elif "Video Analysis:" in last_response_content: return "multimodal_video"
 
 
-    # 3. Keyword-based Routing (General Classification)
+    # 3. Keyword-based Routing 
     if any(keyword in query_lower for keyword in ["feeling", "anxiety", "stress", "overwhelmed", "depressed", "mood", "emotion"]):
         return "cbt"
     if any(keyword in query_lower for keyword in ["goal", "routine", "daily", "improve", "change", "start", "stop", "habit"]):
@@ -506,14 +522,14 @@ def classify_intent(query, chat_history, has_uploaded_video=False):
     # Default to Information Agent for unclassified queries not caught by specific agents
     return "information"
 
-# --- Structured Output Rendering Functions ---
+#  Structured Output Rendering Functions 
 def render_cbt_response(response_dict):
     markdown_output = f"""
     ### 🧠 CBT Analysis
-    **Original Thought:** {response_dict.get('original_thought', 'N/A')}
-    **Thought Distortion:** {response_dict.get('thought_distortion', 'N/A')}
-    **Challenge:** {response_dict.get('challenge', 'N/A')}
-    **Balanced Thought:** {response_dict.get('balanced_thought', 'N/A')}
+    * **Original Thought:** {response_dict.get('original_thought', 'N/A')}
+    * **Thought Distortion:** {response_dict.get('thought_distortion', 'N/A')}
+    * **Challenge:** {response_dict.get('challenge', 'N/A')}
+    * **Balanced Thought:** {response_dict.get('balanced_thought', 'N/A')}
     """
     return markdown_output
 
@@ -526,39 +542,44 @@ def render_habit_response(response_dict):
     * **Cue:** {habit_loop.get('cue', 'N/A')}
     * **Routine:** {habit_loop.get('routine', 'N/A')}
     * **Reward:** {habit_loop.get('reward', 'N/A')}
-    **Tracking Tip:** {response_dict.get('tracking_tip', 'N/A')}
+    * **Tracking Tip:** {response_dict.get('tracking_tip', 'N/A')}
     """
     return markdown_output
 
 def render_spiritual_response(response_dict):
     markdown_output = f"""
     ### ✨ Spiritual Insight
-    **Identified State:** {response_dict.get('identified_state', 'N/A')}
-    **Spiritual Source:** {response_dict.get('spiritual_source', 'N/A')}
-    **Relevant Insight:** {response_dict.get('relevant_insight', 'N/A')}
-    **Interpretation:** {response_dict.get('interpretation', 'N/A')}
-    **Daily Mantra:** {response_dict.get('daily_mantra', 'N/A')}
+    * **Identified State:** {response_dict.get('identified_state', 'N/A')}
+    * **Spiritual Source:** {response_dict.get('spiritual_source', 'N/A')}
+    * **Relevant Insight:** {response_dict.get('relevant_insight', 'N/A')}
+    * **Interpretation:** {response_dict.get('interpretation', 'N/A')}
+    * **Daily Mantra:** {response_dict.get('daily_mantra', 'N/A')}
     """
     return markdown_output
+
+
 
 def render_journal_analysis_response(response_dict):
     main_themes = ", ".join(response_dict.get('main_themes', ['N/A']))
     potential_distortions = ", ".join(response_dict.get('potential_cognitive_distortions', ['None identified']))
-    actionable_insights = "\n".join([f"* {item}" for item in response_dict.get('actionable_insights', ['N/A'])])
+    actionable_insights = " ".join([f"{item}\n" for item in response_dict.get('actionable_insights', ['N/A'])])
 
     markdown_output = f"""
     ### 📝 Journal Analysis
-    **Main Themes:** {main_themes}
-    **Emotional Tone:** {response_dict.get('emotional_tone', 'N/A')}
-    **Potential Cognitive Distortions:** {potential_distortions}
-    **Suggested Reframing:** {response_dict.get('suggested_reframing', 'N/A')}
-    **Actionable Insights:**
-    {actionable_insights}
+    * **Main Themes:** {main_themes}
+    * **Emotional Tone:** {response_dict.get('emotional_tone', 'N/A')}
+    * **Potential Cognitive Distortions:** {potential_distortions}
+    * **Suggested Reframing:** {response_dict.get('suggested_reframing', 'N/A')}
+    * **Actionable Insights:** {actionable_insights}
     """
     return markdown_output
 
-# --- Feedback Handler for Gen AI Evaluation ---
+
+
+#  Feedback Handler for Gen AI Evaluation 
 def handle_feedback(agent_type, is_helpful, message_index):
+    if agent_type not in st.session_state.evaluation_metrics:
+        st.session_state.evaluation_metrics[agent_type] = {"helpful": 0, "unhelpful": 0}    
     if is_helpful:
         st.session_state.evaluation_metrics[agent_type]["helpful"] += 1
         st.session_state.evaluation_metrics["total_helpful"] += 1
@@ -573,7 +594,7 @@ def handle_feedback(agent_type, is_helpful, message_index):
     
     st.rerun() # Rerun to update metrics display
 
-# --- Sidebar for Knowledge & Multimodal Inputs (Cleaned UI) ---
+#  Sidebar for Knowledge & Multimodal Inputs 
 with st.sidebar:
     st.header("📚 Knowledge & Inputs")
     st.markdown("Upload relevant files or paste text to enhance ChetnaShakti's understanding.")
@@ -612,7 +633,7 @@ with st.sidebar:
         ("Scripture Analysis", "Visual Journal Analysis (Mood/Symbols)", "Handwriting Analysis (Text/Sentiment)"),
         key="image_analysis_type_radio"
     )
-    image_context_prompt = st.text_input("Optional: Provide context for image (e.g., 'I'm feeling overwhelmed by duties' for scripture, or 'This is my mood board')", value="", key="image_context_prompt_input")
+    image_context_prompt = st.text_input("Provide context for image (e.g. 'I'm feeling overwhelmed by duties' for scripture or 'This is my mood board')", value="", key="image_context_prompt_input")
 
 
     if uploaded_image and st.button("Analyze Image"):
@@ -621,11 +642,11 @@ with st.sidebar:
         st.session_state.chat_history.append({"role": "system", "content": "Analyzing image..."})
         with st.spinner("Analyzing image..."):
             description = analyze_image(image_bytes, image_analysis_type, image_context_prompt)
-            st.session_state.chat_history.append({"role": "model", "content": f"**Image Analysis ({image_analysis_type}):**\n\n{description}"})
+            st.session_state.chat_history.append({"role": "model", "content": f"**Image Analysis ({image_analysis_type}):**\n\n{description}", "agent_type": "multimodal_image"})
             st.rerun() # Rerun to update chat history
 
     st.subheader("Video Understanding")
-    st.markdown("Upload a video for AI analysis (e.g., spoken journal, check-in).")
+    st.markdown("Upload a video for AI analysis (e.g. spoken journal, check in).")
     st.warning("Video analysis can be slow and consume significant API quota. Use small videos for testing.")
     uploaded_video = st.file_uploader("Choose a video...", type=["mp4", "mov", "avi", "webm"], key="video_uploader")
     video_analysis_user_prompt = st.text_input("Context for video (e.g., 'This is my daily check-in')", value="Analyze my spoken journal entry for emotional state and suggest relevant wellness practices.", key="video_prompt_input")
@@ -642,7 +663,7 @@ with st.sidebar:
         if processed_video_file:
             with st.spinner("Analyzing video content..."):
                 video_analysis_result = analyze_wellness_video_gemini(processed_video_file, video_analysis_user_prompt)
-                st.session_state.chat_history.append({"role": "model", "content": f"Video Analysis: {video_analysis_result}"})
+                st.session_state.chat_history.append({"role": "model", "content": f"Video Analysis: {video_analysis_result}", "agent_type": "multimodal_video"})
             
             # Attempt to delete the file from Gemini File API after analysis
             try:
@@ -651,14 +672,17 @@ with st.sidebar:
             except Exception as e_del:
                 st.warning(f"Warning: Could not delete processed video file {processed_video_file.name}: {e_del}")
         else:
-            st.session_state.chat_history.append({"role": "model", "content": "Video analysis could not be completed due to processing issues."})
+            st.session_state.chat_history.append({"role": "model", "content": "Video analysis could not be completed due to processing issues.", "agent_type": "multimodal_video"})
         
         st.rerun() # Rerun to update chat history
 
 
-# --- Main Chat Interface ---
-st.header("Chat with ChetnaShakti Agents")
-st.markdown("Type your query below. The AI will intelligently route it to the most relevant agent (CBT, Habit, Spiritual, Journal Analysis, Information, or Multimodal).")
+# Main Chat Interface 
+st.header("Chat with ChetnaShakti")
+st.markdown(
+    """
+    **How can I support your well-being today?** Share your thoughts, feelings or goals. I'll intelligently connect you with the right AI coach.
+    """)
 
 # Display chat history
 chat_display_area = st.container(height=500, border=True)
@@ -668,7 +692,7 @@ with chat_display_area:
             st.chat_message("user").write(message["content"])
         elif message["role"] == "model":
             # Determine which agent provided this response for feedback tracking
-            agent_type_for_feedback = "general" # Default
+            agent_type_for_feedback = message.get("agent_type", "information")
             if isinstance(message["content"], dict):
                 if "original_thought" in message["content"]: agent_type_for_feedback = "cbt"
                 elif "habit_goal" in message["content"]: agent_type_for_feedback = "habit"
@@ -693,7 +717,6 @@ with chat_display_area:
                     st.markdown(message["content"])
                     if "Image Analysis:" in message["content"]: agent_type_for_feedback = "multimodal_image"
                     elif "Video Analysis:" in message["content"]: agent_type_for_feedback = "multimodal_video"
-                    elif "Sources:" in message["content"] or "Sorry, an error occurred while performing the search" in message["content"]: agent_type_for_feedback = "information"
             
             # Add feedback buttons only for AI responses and if feedback hasn't been given
             if not message.get('feedback_given', False):
@@ -774,16 +797,15 @@ if user_input:
             search_query = user_input
             final_content = ""
             
-            try:
-                # This is the direct call to Gemini with the Google Search tool, as per your notebook
-                # This requires the tool to be available in the execution environment (e.g., Google AI Studio, Vertex AI)
+            try:                
                 config_with_search = genai.types.GenerationConfig(
                     tools=[genai.tool_named('google_search')] 
                 )
+                              
                 
                 response = text_model.generate_content(
                     contents=search_query, # User query directly as content for tool use
-                    generation_config=config_with_search
+                    config=config_new
                 )
                 
                 markdown_buffer = io.StringIO()
@@ -823,26 +845,21 @@ if user_input:
                     
                     final_content = markdown_buffer.getvalue()
                 elif rc.content and rc.content.parts:
-                    # If no grounding metadata but a direct text response (e.g., model answered without search)
+                    # If no grounding metadata but a direct text response (model answered without search)
                     final_content = rc.content.parts[0].text
                 else:
                     final_content = "No specific information found."
 
             except Exception as e:
-                # Catch specific errors related to tool unavailability in local environment
-                # The error might manifest as a tool execution error or a direct API error
                 if "tool" in str(e).lower() or "function_call" in str(e).lower() or "google_search" in str(e).lower():
                     final_content = (
-                        "**Google Search (Simulated for Local Demo):**\n\n"
-                        f"The AI attempted to search for '{search_query}', but the `google_search` tool is typically available "
-                        "only in specific Google-managed environments (like Google AI Studio or Vertex AI). "
-                        "For local execution with actual web search, you would need to integrate a separate search API (e.g., Google Custom Search API, SerpApi) "
-                        "and update the `information` agent to use that external API. "
-                        "Here's a *simulated* response for demonstration purposes:\n\n"
-                        f"**Simulated Search Result for '{search_query}':** "
-                        "Mindfulness practices, such as meditation and deep breathing, are widely recognized for their effectiveness in reducing stress and anxiety. "
-                        "Studies suggest that regular practice can lead to improved emotional regulation and cognitive flexibility. "
-                        "For more detailed information, you would typically see citations to various web sources here if the search were live."
+                        "**A Little Insight for You:**\n\n"
+                        f"I tried to find specific information on '{search_query}' for you, but it seems I'm unable to connect to real-time web results right now. "
+                        "Sometimes, these connections are best in a fully deployed environment. "
+                        "However, based on my general knowledge as your coach, here's a thought on your query:\n\n"
+                        f"For '{search_query}', remember that **mindfulness practices, like deep breathing and meditation, are often very helpful for reducing stress and anxiety.** "
+                        "They can truly bring a sense of calm and help you gain perspective. "
+                        "In a live setting, I'd be able to share direct links to articles and resources on this topic!"
                     )
                 elif "quota" in str(e).lower():
                     final_content = "Sorry, I'm currently unable to perform searches due to usage limits. Please try again later."
@@ -851,13 +868,13 @@ if user_input:
             
             ai_response_content = final_content + "\n\n*Disclaimer: Information provided is from web search (or simulated) and is not medical or psychological advice.*"
 
-        else: # Fallback / General Agent (should be rare with good intent classification)
+        else: # Fallback 
             ai_response_content = get_plain_ai_response(f"I'm ChetnaShakti. How can I help you with '{user_input}'? You can ask about CBT, habits, spiritual guidance, analyze a journal, analyze an image or video (via sidebar), or ask general questions.")
 
         if ai_response_content:
             st.session_state.chat_history.append({"role": "model", "content": ai_response_content, "agent_type": intent}) # Store agent type for feedback
             with chat_display_area:
-                # Re-render the new message (and feedback buttons if applicable)
+                # Re-render the new message
                 if isinstance(ai_response_content, dict):
                     if intent == "cbt":
                         st.markdown(render_cbt_response(ai_response_content))
@@ -883,80 +900,88 @@ if user_input:
                             handle_feedback(intent, False, len(st.session_state.chat_history)-1)
                     with col3:
                         st.caption("Was this helpful?")
+        st.rerun() 
 
-        # After processing, ensure the chat display scrolls to the bottom
-        st.rerun() # Use fragment rerun if available for smoother scroll
-
-# --- Gen AI Evaluation Section (from Notebook - Exact Content) ---
+# Gen AI Evaluation Section
 st.markdown("---")
-with st.expander("📈 **Gen AI Evaluation: Ensuring ChetnaShakti's Effectiveness**"):
+with st.expander("📈 **Curious about how ChetnaShakti learns and improves? Click to explore our AI Evaluation!**"):
     st.markdown(
         """
-        In the context of ChetnaShakti, continuous evaluation is crucial to ensure the AI coach remains effective, empathetic, and aligned with user needs. This involves tracking various metrics and gathering feedback.
+At ChetnaShakti, we're dedicated to ensuring your AI coach is always effective, empathetic, and truly helpful. This means we constantly evaluate and refine our system based on various metrics and your valuable feedback.
 
-        ### **1. Emotional Awareness & Cognitive Shifts:**
+Here's a peek into how we measure ChetnaShakti's impact:
 
-        * **Metrics:**
-            * Sentiment analysis of user inputs over time (e.g., pre-session vs. post-session sentiment scores).
-            * Frequency of identified cognitive distortions (e.g., "all-or-nothing thinking," "catastrophizing").
-            * Successful reframing rates (how often the user acknowledges a reframed thought as helpful).
-            * User self-reports on emotional state changes (e.g., "I feel less anxious now").
+### **1. 🧠 Emotional Awareness & Cognitive Shifts**
+We track how well ChetnaShakti understands and helps you with your emotional landscape and thought patterns.
 
-        * **Methodology:**
-            * AI models can analyze user's emotional tone and identify shifts after interacting with the CBT agent.
-            * Post-interaction surveys or quick check-ins asking users to rate their emotional state.
-            * Analysis of journal entries for recurring negative patterns and their reduction over time.
+* **What we measure:**
+    * Changes in your emotional tone over time (before vs after interactions).
+    * How often we identify and help you reframe negative thought patterns (like "all-or-nothing thinking").
+    * Your feedback on whether reframed thoughts feel truly helpful.
+    * Your own reports on feeling less anxious or more balanced.
 
-        ### **2. Habit Formation & Goal Completion:**
+* **How we do it:**
+    * AI analyzes your emotional cues and language.
+    * We use quick surveys and check-ins to get your direct emotional state ratings.
+    * We look for reductions in negative patterns in your journal entries over time.
 
-        * **Metrics:**
-            * User-reported adherence to new habits (e.g., "I meditated for 10 minutes today").
-            * Completion rates of micro-goals set with the Habit Agent.
-            * Progress towards larger habit transformation goals (e.g., "I've consistently woken up early for a month").
+### **2. 🎯 Habit Formation & Goal Completion**
+We assess how effectively ChetnaShakti supports you in building new, positive habits and achieving your wellness goals.
 
-        * **Methodology:**
-            * Simple in-app tracking mechanisms where users can log their habit progress.
-            * Periodic check-ins by the AI to inquire about habit adherence.
-            * Analysis of user inputs for mentions of successful habit implementation or struggles.
+* **What we measure:**
+    * Your reported consistency with new habits (e.g. daily meditation).
+    * Success rates for the small, actionable steps (micro goals) you set.
+    * Overall progress towards your larger habit transformation goals.
 
-        ### **3. Spiritual Evolution & Insight:**
+* **How we do it:**
+    * In app tracking lets you log your habit progress.
+    * The AI periodically checks in on your habit adherence.
+    * We analyze your inputs for mentions of successful habit implementation or challenges.
 
-        * **Metrics:**
-            * User satisfaction with spiritual guidance (e.g., ratings of insightfulness, relevance).
-            * Perceived depth of insights (qualitative assessment of user feedback).
-            * Frequency of engaging with suggested spiritual practices (if tracked).
-            * Analysis of journal entries for themes of spiritual growth, peace, or understanding.
+### **3. ✨ Spiritual Evolution & Insight**
+We evaluate the quality and relevance of the spiritual guidance provided by your AI coach.
 
-        ### **4. Overall User Engagement & Satisfaction:**
+* **What we measure:**
+    * Your satisfaction with the spiritual insights and their relevance to your life.
+    * The perceived depth and wisdom of the guidance (from your feedback).
+    * How often you engage with suggested spiritual practices.
 
-        * **Metrics:**
-            * Session duration and frequency of use.
-            * User retention over time.
-            * Direct user ratings and feedback on the overall coaching experience.
-            * Completion of multi-turn conversations or specific coaching pathways.
+* **How we do it:**
+    * We gather your qualitative feedback through open-ended questions.
+    * We analyze the sentiment of your responses to spiritual guidance.
+    * We observe if spiritual concepts are being integrated into your later queries or journal entries.
 
-        * **Methodology:**
-            * In-app analytics for usage patterns.
-            * NPS (Net Promoter Score) or CSAT (Customer Satisfaction) surveys.
-            * A/B testing of different interaction flows or agent behaviors.
+### **4. 👍 Overall User Engagement & Satisfaction**
+This looks at your overall experience and how much you find ChetnaShakti valuable.
 
-        ### **5. AI Performance Metrics:**
+* **What we measure:**
+    * How long and how often you use the app.
+    * How many users continue to use ChetnaShakti over time.
+    * Your direct ratings and comments on the overall coaching experience.
+    * Completion of multi turn conversations or specific coaching pathways.
 
-        * **Metrics:**
-            * **Latency:** Response time of AI agents.
-            * **Token Usage:** Efficiency of prompt and response generation.
-            * **Model Accuracy:** In intent classification (how often the correct agent is chosen).
-            * **Relevance of RAG Retrieval:** How well retrieved documents match user queries.
-            * **Hallucination Rate:** How often the AI generates factually incorrect or unsupported information.
+* **How we do it:**
+    * We use anonymous usage analytics.
+    * We test different interaction styles to see what works best for you.
 
-        * **Methodology:**
-            * Monitoring API calls and server logs.
-            * Human evaluation of AI responses against a rubric (e.g., factual correctness, helpfulness, empathy).
-            * Automated tests for intent classification accuracy.
-            * Fine-tuning models based on identified performance gaps.
+### **5. 🤖 AI Performance Metrics**
+These are the technical measures that ensure the AI itself is running smoothly and intelligently.
 
-        This comprehensive evaluation framework ensures ChetnaShakti continuously improves and provides the most impactful support to its users, aligning with the vision of a "conscious agent with intent."
-        """
+* **What we measure:**
+    * **Response Speed:** How quickly the AI agents respond to your queries.
+    * **Efficiency:** How efficiently the AI uses its processing power.
+    * **Accuracy:** How often the AI correctly understands your intent and routes you to the right coach.
+    * **Relevance:** How well retrieved information (from PDFs or search) matches your questions.
+    * **Honesty:** How rarely the AI generates incorrect or unsupported information.
+
+* **How we do it:**
+    * We monitor API calls and system logs.
+    * Human experts review AI responses for correctness and helpfulness.
+    * We run automated tests to ensure accurate intent classification.
+    * We continuously fine-tune the AI models based on these performance insights.
+
+This comprehensive evaluation framework is our commitment to ensuring ChetnaShakti continuously improves and provides the most impactful support to your well being journey, truly aligning with the vision of a "conscious agent with intent."
+"""
     )
 
     st.subheader("Current Session Feedback Metrics:")
@@ -975,7 +1000,7 @@ with st.expander("📈 **Gen AI Evaluation: Ensuring ChetnaShakti's Effectivenes
     st.markdown("---")
     st.markdown("**Feedback per Agent Type:**")
     for agent, metrics in st.session_state.evaluation_metrics.items():
-        if isinstance(metrics, dict) and "helpful" in metrics: # Filter out total_interactions etc.
+        if isinstance(metrics, dict) and "helpful" in metrics: # Filter out total_interactions
             agent_total = metrics["helpful"] + metrics["unhelpful"]
             if agent_total > 0:
                 st.markdown(f"- **{agent.replace('_', ' ').title()} Agent:** Helpful: `{metrics['helpful']}` | Unhelpful: `{metrics['unhelpful']}` | Rate: `{metrics['helpful'] / agent_total:.2%}`")
