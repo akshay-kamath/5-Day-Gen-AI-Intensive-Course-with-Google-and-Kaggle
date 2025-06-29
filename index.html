@@ -6,7 +6,7 @@
     <title>ChetnaShakti: AI-Powered Wellness Coach</title>
     <!-- Chosen Palette: Serene Sunrise -->
     <!-- Application Structure Plan: The SPA is structured as a narrative journey, guiding users from the "Why" (the problem) to the "What" (the solution & approach) and finally to the "How" (the technology and an interactive demo). This top-down structure uses a fixed navigation bar for easy exploration across thematic sections: 'Home', 'The Approach', 'AI Features', 'Technology', and an 'Interactive Demo'. This design was chosen to transform the static, text-heavy README into a dynamic, explorable format, making the complex concepts of AI agents and spiritual coaching more digestible and engaging for the user. The interactive demo at the end serves as a powerful call to action, allowing users to tangibly experience the coach's capabilities. -->
-    <!-- Visualization & Content Choices: 
+    <!-- Visualization & Content Choices:
         - Problem Statistics: Report Info -> 970M people with mental disorders. Goal -> Impactfully inform. Viz -> Donut Chart (Chart.js) in a dedicated container & a large stat callout. Interaction -> Hover tooltips on chart segments. Justification -> Visual data is more memorable and impactful than text alone.
         - ChetnaShakti's Core Pillars (CBT, Habit, Spiritual): Report Info -> Text descriptions of the three pillars. Goal -> Organize & Clarify. Viz -> Three-column card layout with icons. Interaction -> Subtle hover effects. Justification -> Visually separates the core concepts for easy comparison and understanding.
         - GenAI Features: Report Info -> List of AI capabilities. Goal -> Inform. Viz -> Grid of icon-based cards. Interaction -> Hover effects. Justification -> Icons provide quick visual recognition for technical features, making them less intimidating.
@@ -22,7 +22,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #FFFAF0; /* FloralWhite - a warm, soft neutral */
-            color: #4A4A4A; /* A softer black */
+            color: #333333; /* Darker gray for better contrast */
         }
         .nav-link {
             transition: color 0.3s, border-bottom-color 0.3s;
@@ -34,10 +34,18 @@
         .btn-primary {
             background-color: #D97706; /* Amber-600 */
             color: white;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s ease-out;
         }
         .btn-primary:hover {
             background-color: #B45309; /* Amber-700 */
+            transform: translateY(-2px);
+        }
+        .card-hover-effect {
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         .chart-container {
             position: relative;
@@ -53,22 +61,54 @@
             }
         }
         .agent-response {
-            white-space: pre-wrap;
+            white-space: pre-wrap; /* Ensures newlines and spaces are preserved */
             word-break: break-word;
+            font-family: 'Inter', sans-serif; /* Changed to Inter for consistency */
+            line-height: 1.6; /* Increased line height for readability */
+            color: #333333; /* Darker text for readability */
+            background-color: #F8F8F8; /* Light background for the response */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .agent-response h3, .agent-response strong {
+            color: #D97706; /* Highlight headings and strong text */
+        }
+        .agent-response ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            padding-left: 0;
+        }
+        .video-placeholder {
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 180px; /* Fixed height for consistency */
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+        }
+        .video-placeholder svg {
+            fill: white;
+            width: 60px;
+            height: 60px;
         }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- Header & Navigation -->
-    <header id="header" class="bg-floralwhite/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <header id="header" class="bg-floralwhite/90 backdrop-blur-md sticky top-0 z-50 shadow-md">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
                     <a href="#home" class="text-2xl font-bold text-amber-700">ChetnaShakti</a>
                 </div>
                 <div class="hidden md:block">
-                    <nav class="ml-10 flex items-baseline space-x-4">
+                    <nav class="ml-10 flex items-baseline space-x-6">
                         <a href="#home" class="nav-link px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Home</a>
                         <a href="#approach" class="nav-link px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">The Approach</a>
                         <a href="#features" class="nav-link px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">AI Features</a>
@@ -104,33 +144,33 @@
         <section id="home" class="pt-20 pb-16">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-stone-800">Awaken Your Inner Power.</h1>
-                    <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-stone-600">ChetnaShakti is an AI wellness coach that bridges the gap between modern therapy and ancient wisdom, guiding you on your journey of self-discovery and transformation.</p>
+                    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-stone-800">Awaken Your Inner Power.</h1>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-stone-600 leading-relaxed">Welcome to **ChetnaShakti**, your personal AI wellness coach designed to empower your journey towards mental and emotional well-being!</p>
                 </div>
 
                 <div class="mt-16 grid md:grid-cols-2 gap-12 items-center">
                     <div class="text-left">
-                        <h2 class="text-2xl font-bold text-stone-800">Addressing a Global Need</h2>
-                        <p class="mt-4 text-stone-600">In a world facing unprecedented pressures, mental and spiritual well-being are more critical than ever. Traditional support systems often fall short due to high costs, social stigma, and a lack of continuous, personalized care. ChetnaShakti was created to address these gaps.</p>
+                        <h2 class="text-2xl md:text-3xl font-bold text-stone-800">Addressing a Global Need</h2>
+                        <p class="mt-4 text-stone-600 leading-relaxed">In a world facing unprecedented pressures, mental and spiritual well-being are more critical than ever. Traditional support systems often fall short due to high costs, social stigma, and a lack of continuous, personalized care. ChetnaShakti was created to address these gaps.</p>
                         <ul class="mt-6 space-y-4">
                             <li class="flex items-start">
-                                <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center bg-amber-100 text-amber-700 rounded-full">✓</span>
+                                <span class="flex-shrink-0 h-7 w-7 flex items-center justify-center bg-amber-100 text-amber-700 rounded-full text-lg">✓</span>
                                 <p class="ml-3 text-stone-600"><strong>Rising Burden:</strong> Over 970 million people suffer from mental disorders globally.</p>
                             </li>
                             <li class="flex items-start">
-                                <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center bg-amber-100 text-amber-700 rounded-full">✓</span>
+                                <span class="flex-shrink-0 h-7 w-7 flex items-center justify-center bg-amber-100 text-amber-700 rounded-full text-lg">✓</span>
                                 <p class="ml-3 text-stone-600"><strong>Economic Stress:</strong> Job instability has triggered widespread anxiety and identity loss.</p>
                             </li>
                             <li class="flex items-start">
-                                <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center bg-amber-100 text-amber-700 rounded-full">✓</span>
+                                <span class="flex-shrink-0 h-7 w-7 flex items-center justify-center bg-amber-100 text-amber-700 rounded-full text-lg">✓</span>
                                 <p class="ml-3 text-stone-600"><strong>Spiritual Void:</strong> A growing yearning for depth, meaning, and authentic connection.</p>
                             </li>
                         </ul>
                     </div>
-                    <div class="w-full">
-                         <div class="chart-container">
-                            <canvas id="problemsChart"></canvas>
-                        </div>
+                    <div class="w-full flex justify-center items-center">
+                           <div class="chart-container">
+                                <canvas id="problemsChart"></canvas>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -140,27 +180,27 @@
         <section id="approach" class="py-16 bg-amber-50">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold tracking-tight text-stone-800">A Holistic Path to Wellness</h2>
-                    <p class="mt-4 max-w-3xl mx-auto text-lg text-stone-600">This section introduces the core methodologies of ChetnaShakti. Our approach integrates proven therapeutic techniques with timeless spiritual practices and modern behavioral science to offer a truly comprehensive support system for your mind, habits, and spirit.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-stone-800">A Holistic Path to Wellness</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-stone-600 leading-relaxed">Our approach integrates proven therapeutic techniques with timeless spiritual practices and modern behavioral science to offer a truly comprehensive support system for your mind, habits, and spirit.</p>
                 </div>
                 <div class="mt-12 grid md:grid-cols-3 gap-8">
                     <!-- CBT Card -->
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 text-amber-700 text-2xl mb-4">🧠</div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg card-hover-effect">
+                        <div class="flex items-center justify-center h-14 w-14 rounded-full bg-amber-100 text-amber-700 text-3xl mb-4">🧠</div>
                         <h3 class="text-xl font-semibold text-stone-800">Cognitive Behavioral Therapy (CBT)</h3>
-                        <p class="mt-2 text-stone-600">Engage in structured self-reflection and guided journaling to identify and reframe unhelpful thought patterns, enhancing your emotional intelligence and resilience.</p>
+                        <p class="mt-2 text-stone-600 leading-relaxed">Engage in structured self-reflection and guided journaling to identify and reframe unhelpful thought patterns, enhancing your emotional intelligence and resilience.</p>
                     </div>
                     <!-- Habit Formation Card -->
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 text-amber-700 text-2xl mb-4">🔄</div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg card-hover-effect">
+                        <div class="flex items-center justify-center h-14 w-14 rounded-full bg-amber-100 text-amber-700 text-3xl mb-4">🔄</div>
                         <h3 class="text-xl font-semibold text-stone-800">Habit Formation & Rewiring</h3>
-                        <p class="mt-2 text-stone-600">Utilize methods based on behavioral loops (cue, routine, reward) and micro-goals to build positive habits and achieve consistent personal growth.</p>
+                        <p class="mt-2 text-stone-600 leading-relaxed">Utilize methods based on behavioral loops (cue, routine, reward) and micro-goals to build positive habits and achieve consistent personal growth.</p>
                     </div>
                     <!-- Spiritual Guidance Card -->
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 text-amber-700 text-2xl mb-4">🙏</div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg card-hover-effect">
+                        <div class="flex items-center justify-center h-14 w-14 rounded-full bg-amber-100 text-amber-700 text-3xl mb-4">🙏</div>
                         <h3 class="text-xl font-semibold text-stone-800">Spiritual Guidance</h3>
-                        <p class="mt-2 text-stone-600">Receive wisdom from ancient Indian scriptures like the Bhagavad Gita, offering deep perspectives aligned with your inner struggles and emotional states.</p>
+                        <p class="mt-2 text-stone-600 leading-relaxed">Receive wisdom from ancient Indian scriptures like the Bhagavad Gita, offering deep perspectives aligned with your inner struggles and emotional states.</p>
                     </div>
                 </div>
             </div>
@@ -170,49 +210,49 @@
         <section id="features" class="py-16">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold tracking-tight text-stone-800">Powered by Generative AI</h2>
-                    <p class="mt-4 max-w-3xl mx-auto text-lg text-stone-600">This section highlights the advanced AI capabilities that make ChetnaShakti a dynamic and adaptive wellness partner. These features enable the coach to understand you on a deeper level and provide truly personalized support at scale.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-stone-800">Powered by Generative AI</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-stone-600 leading-relaxed">This section highlights the advanced AI capabilities that make ChetnaShakti a dynamic and adaptive wellness partner. These features enable the coach to understand you on a deeper level and provide truly personalized support at scale.</p>
                 </div>
                 <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 text-3xl">🎯</div>
+                    <div class="flex items-start p-4 rounded-lg bg-white shadow-sm card-hover-effect">
+                        <div class="flex-shrink-0 text-4xl">🎯</div>
                         <div class="ml-4">
-                            <h4 class="text-lg font-semibold">Personalization at Scale</h4>
+                            <h4 class="text-lg font-semibold text-stone-800">Personalization at Scale</h4>
                             <p class="mt-1 text-stone-600">Generates individualized guidance based on your unique mood, goals, and history.</p>
                         </div>
                     </div>
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 text-3xl">⏳</div>
+                    <div class="flex items-start p-4 rounded-lg bg-white shadow-sm card-hover-effect">
+                        <div class="flex-shrink-0 text-4xl">⏳</div>
                         <div class="ml-4">
-                            <h4 class="text-lg font-semibold">Contextual Understanding</h4>
+                            <h4 class="text-lg font-semibold text-stone-800">Contextual Understanding</h4>
                             <p class="mt-1 text-stone-600">Reads emotional tone and remembers patterns over time for smarter insights.</p>
                         </div>
                     </div>
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 text-3xl">📖</div>
+                    <div class="flex items-start p-4 rounded-lg bg-white shadow-sm card-hover-effect">
+                        <div class="flex-shrink-0 text-4xl">📖</div>
                         <div class="ml-4">
-                            <h4 class="text-lg font-semibold">Document & Journal Analysis</h4>
+                            <h4 class="text-lg font-semibold text-stone-800">Document & Journal Analysis</h4>
                             <p class="mt-1 text-stone-600">Extracts insights and cognitive distortions from your long-form journal entries.</p>
                         </div>
                     </div>
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 text-3xl">🖼️</div>
+                    <div class="flex items-start p-4 rounded-lg bg-white shadow-sm card-hover-effect">
+                        <div class="flex-shrink-0 text-4xl">🖼️</div>
                         <div class="ml-4">
-                            <h4 class="text-lg font-semibold">Image & Video Understanding</h4>
+                            <h4 class="text-lg font-semibold text-stone-800">Image & Video Understanding</h4>
                             <p class="mt-1 text-stone-600">Interprets emotional and symbolic meaning from images, videos, and spoken journals.</p>
                         </div>
                     </div>
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 text-3xl">🔗</div>
+                    <div class="flex items-start p-4 rounded-lg bg-white shadow-sm card-hover-effect">
+                        <div class="flex-shrink-0 text-4xl">🔗</div>
                         <div class="ml-4">
-                            <h4 class="text-lg font-semibold">Holistic Knowledge Integration</h4>
+                            <h4 class="text-lg font-semibold text-stone-800">Holistic Knowledge Integration</h4>
                             <p class="mt-1 text-stone-600">Fuses clinical psychology, behavioral science, and spiritual scriptures in real-time.</p>
                         </div>
                     </div>
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 text-3xl">📊</div>
+                    <div class="flex items-start p-4 rounded-lg bg-white shadow-sm card-hover-effect">
+                        <div class="flex-shrink-0 text-4xl">📊</div>
                         <div class="ml-4">
-                            <h4 class="text-lg font-semibold">Structured Output for Tracking</h4>
+                            <h4 class="text-lg font-semibold text-stone-800">Structured Output for Tracking</h4>
                             <p class="mt-1 text-stone-600">Provides data in JSON format for easy integration with wellness dashboards and apps.</p>
                         </div>
                     </div>
@@ -224,45 +264,54 @@
         <section id="tech" class="py-16 bg-amber-50">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold tracking-tight text-stone-800">The Technology Stack</h2>
-                    <p class="mt-4 max-w-3xl mx-auto text-lg text-stone-600">This section outlines the powerful open-source libraries and platforms that form the technical foundation of ChetnaShakti, enabling its advanced AI and conversational capabilities.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-stone-800">The Technology Stack</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-stone-600 leading-relaxed">This section outlines the powerful open-source libraries and platforms that form the technical foundation of ChetnaShakti, enabling its advanced AI and conversational capabilities.</p>
                 </div>
                 <div class="mt-12 max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                     <div class="flex flex-col items-center">
-                        <img src="https://placehold.co/64x64/FBBF24/4A4A4A?text=Py" alt="Python" class="h-16 w-16 rounded-full"/>
-                        <p class="mt-2 font-semibold">Python</p>
+                        <img src="https://placehold.co/64x64/FBBF24/4A4A4A?text=Py" alt="Python logo" class="h-16 w-16 rounded-full shadow-md"/>
+                        <p class="mt-3 font-semibold text-stone-700">Python</p>
                     </div>
                     <div class="flex flex-col items-center">
-                         <img src="https://placehold.co/64x64/FBBF24/4A4A4A?text=G" alt="Google AI" class="h-16 w-16 rounded-full"/>
-                        <p class="mt-2 font-semibold">Google GenAI SDK</p>
+                           <img src="https://placehold.co/64x64/FBBF24/4A4A4A?text=G" alt="Google AI logo" class="h-16 w-16 rounded-full shadow-md"/>
+                        <p class="mt-3 font-semibold text-stone-700">Google GenAI SDK</p>
                     </div>
                     <div class="flex flex-col items-center">
-                        <img src="https://placehold.co/64x64/FBBF24/4A4A4A?text=LC" alt="LangChain" class="h-16 w-16 rounded-full"/>
-                        <p class="mt-2 font-semibold">LangChain</p>
+                        <img src="https://placehold.co/64x64/FBBF24/4A4A4A?text=LC" alt="LangChain logo" class="h-16 w-16 rounded-full shadow-md"/>
+                        <p class="mt-3 font-semibold text-stone-700">LangChain</p>
                     </div>
                     <div class="flex flex-col items-center">
-                        <img src="https://placehold.co/64x64/FBBF24/4A4A4A?text=LG" alt="LangGraph" class="h-16 w-16 rounded-full"/>
-                        <p class="mt-2 font-semibold">LangGraph</p>
+                        <img src="https://placehold.co/64x64/FBBF24/4A4A4A?text=LG" alt="LangGraph logo" class="h-16 w-16 rounded-full shadow-md"/>
+                        <p class="mt-3 font-semibold text-stone-700">LangGraph</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Interactive Demo Section -->
-        <section id="demo" class="py-16">
+        <section id="demo" class="py-16 bg-gradient-to-br from-amber-50 to-floralwhite">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold tracking-tight text-stone-800">Experience the Agents</h2>
-                     <p class="mt-4 max-w-3xl mx-auto text-lg text-stone-600">Get a feel for how ChetnaShakti responds. Choose a pathway below to see a simulated interaction with one of the specialized AI agents. This demonstration illustrates how the coach provides structured, actionable, and compassionate guidance tailored to your needs.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-stone-800">Experience the Agents</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-stone-600 leading-relaxed">Get a feel for how ChetnaShakti responds. Choose a pathway below to see a simulated interaction with one of the specialized AI agents. This demonstration illustrates how the coach provides structured, actionable, and compassionate guidance tailored to your needs. Note: Gen AI Evaluation is a conceptual feature for a full system, not an interactive demo here.</p>
+                    <!-- NEW: Links to Live Demo and Blog Post -->
+                    <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
+                        <a href="https://aipoweredcoach.streamlit.app/" target="_blank" class="btn-primary font-semibold py-3 px-6 rounded-lg shadow-md text-lg">🚀 Try Live Demo</a>
+                        <a href="https://medium.com/@akshaykamath2023/genai-with-a-soul-architecting-conscious-agents-with-intent-5887e49b610e" target="_blank" class="btn-primary font-semibold py-3 px-6 rounded-lg shadow-md text-lg">📝 Read Blog Post</a>
+                    </div>
                 </div>
-                <div class="mt-12 max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-4 md:p-6">
-                    <div id="demo-output" class="mb-4 p-4 h-80 bg-gray-50 rounded-md overflow-y-auto">
+                <div class="mt-12 max-w-3xl mx-auto bg-white rounded-xl shadow-2xl p-6 md:p-8 border border-amber-100">
+                    <div id="demo-output" class="mb-6 p-5 h-80 bg-gray-50 rounded-lg overflow-y-auto border border-gray-200 text-gray-700">
                         <p class="text-gray-500">Welcome! Please select a pathway to begin the demonstration.</p>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <button onclick="showDemo('cbt')" class="btn-primary font-semibold py-2 px-4 rounded-lg w-full">🧠 CBT Pathway</button>
-                        <button onclick="showDemo('habit')" class="btn-primary font-semibold py-2 px-4 rounded-lg w-full">🔄 Habit Pathway</button>
-                        <button onclick="showDemo('spiritual')" class="btn-primary font-semibold py-2 px-4 rounded-lg w-full">🙏 Spiritual Pathway</button>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <button onclick="showDemo('cbt')" class="btn-primary font-semibold py-3 px-4 rounded-lg w-full text-lg shadow-md">🧠 CBT Pathway</button>
+                        <button onclick="showDemo('habit')" class="btn-primary font-semibold py-3 px-4 rounded-lg w-full text-lg shadow-md">🔄 Habit Pathway</button>
+                        <button onclick="showDemo('spiritual')" class="btn-primary font-semibold py-3 px-4 rounded-lg w-full text-lg shadow-md">🙏 Spiritual Pathway</button>
+                        <button onclick="showDemo('journal')" class="btn-primary font-semibold py-3 px-4 rounded-lg w-full text-lg shadow-md">📝 Journal Analysis</button>
+                        <button onclick="showDemo('image')" class="btn-primary font-semibold py-3 px-4 rounded-lg w-full text-lg shadow-md">🖼️ Image Understanding</button>
+                        <button onclick="showDemo('video')" class="btn-primary font-semibold py-3 px-4 rounded-lg w-full text-lg shadow-md">📹 Video Understanding</button>
+                        <button onclick="showDemo('search')" class="btn-primary font-semibold py-3 px-4 rounded-lg w-full text-lg shadow-md">🌐 Google Search</button>
                     </div>
                 </div>
             </div>
@@ -275,7 +324,7 @@
         <div class="container mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
              <p class="font-bold text-lg">ChetnaShakti</p>
              <p class="mt-2 text-sm text-stone-400">An AI-Powered Coach for Self Therapy & Habit Rewiring</p>
-             <p class="mt-4 text-xs text-stone-500">&copy; 2024. Created as a capstone project for the Kaggle 5-day GenAI Course.</p>
+             <p class="mt-4 text-xs text-stone-500">&copy; 2025. Created as a capstone project for the Kaggle 5-day GenAI Course.</p>
         </div>
     </footer>
 
@@ -311,7 +360,8 @@
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 70) {
+                // Adjust for fixed header height
+                if (pageYOffset >= sectionTop - document.getElementById('header').offsetHeight - 10) {
                     current = section.getAttribute('id');
                 }
             });
@@ -356,7 +406,8 @@
                             color: '#4A4A4A',
                             font: {
                                 size: 12
-                            }
+                            },
+                            padding: 20
                         }
                     },
                     tooltip: {
@@ -371,49 +422,201 @@
                                 }
                                 return label;
                             }
-                        }
+                        },
+                        backgroundColor: '#333',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        padding: 10,
+                        cornerRadius: 6
                     }
                 }
             },
         };
 
-        window.onload = function() {
+        window.addEventListener('load', function() {
             const ctx = document.getElementById('problemsChart').getContext('2d');
             new Chart(ctx, problemsConfig);
-        };
+        });
         
         // Interactive Demo Logic
+
+        // Helper function to format CBT response
+        function formatCBTResponse(data) {
+            return `
+<h3>🧠 CBT Analysis</h3>
+<p><strong>Original Thought:</strong> ${data.original_thought || 'N/A'}</p>
+<p><strong>Thought Distortion:</strong> ${data.thought_distortion || 'N/A'}</p>
+<p><strong>Challenge:</strong> ${data.challenge || 'N/A'}</p>
+<p><strong>Balanced Thought:</strong> ${data.balanced_thought || 'N/A'}</p>
+            `.trim();
+        }
+
+        // Helper function to format Habit response
+        function formatHabitResponse(data) {
+            const habitLoop = data.habit_loop || {};
+            return `
+<h3>🎯 Habit Rewiring Plan</h3>
+<p><strong>Habit Goal:</strong> ${data.habit_goal || 'N/A'}</p>
+<p><strong>Habit Loop:</strong></p>
+<ul>
+    <li><strong>Cue:</strong> ${habitLoop.cue || 'N/A'}</li>
+    <li><strong>Routine:</strong> ${habitLoop.routine || 'N/A'}</li>
+    <li><strong>Reward:</strong> ${habitLoop.reward || 'N/A'}</li>
+</ul>
+<p><strong>Tracking Tip:</strong> ${data.tracking_tip || 'N/A'}</p>
+            `.trim();
+        }
+
+        // Helper function to format Spiritual response
+        function formatSpiritualResponse(data) {
+            return `
+<h3>✨ Spiritual Insight</h3>
+<p><strong>Identified State:</strong> ${data.identified_state || 'N/A'}</p>
+<p><strong>Spiritual Source:</strong> ${data.spiritual_source || 'N/A'}</p>
+<p><strong>Relevant Insight:</strong> ${data.relevant_insight || 'N/A'}</p>
+<p><strong>Interpretation:</strong> ${data.interpretation || 'N/A'}</p>
+<p><strong>Daily Mantra:</strong> ${data.daily_mantra || 'N/A'}</p>
+            `.trim();
+        }
+
+        // Helper function to format Journal Analysis response
+        function formatJournalAnalysisResponse(data) {
+            const mainThemes = data.main_themes && data.main_themes.length > 0 ? 
+                                `<ul>${data.main_themes.map(item => `<li>${item}</li>`).join('')}</ul>` : 'N/A';
+            const potentialDistortions = data.potential_cognitive_distortions && data.potential_cognitive_distortions.length > 0 ?
+                                        `<ul>${data.potential_cognitive_distortions.map(item => `<li>${item}</li>`).join('')}</ul>` : 'None identified';
+            const actionableInsights = data.actionable_insights && data.actionable_insights.length > 0 ?
+                                        `<ul>${data.actionable_insights.map(item => `<li>${item}</li>`).join('')}</ul>` : 'N/A';
+
+            return `
+<h3>📝 Journal Analysis</h3>
+<p><strong>Main Themes:</strong> ${mainThemes}</p>
+<p><strong>Emotional Tone:</strong> ${data.emotional_tone || 'N/A'}</p>
+<p><strong>Potential Cognitive Distortions:</strong> ${potentialDistortions}</p>
+<p><strong>Suggested Reframing:</strong> ${data.suggested_reframing || 'N/A'}</p>
+<p><strong>Actionable Insights:</strong> ${actionableInsights}</p>
+            `.trim();
+        }
+
+        // Helper function for Image Understanding
+        function formatImageUnderstandingResponse(data) {
+            return `
+<h3>🖼️ Image Analysis</h3>
+<p><strong>User Query:</strong> ${data.user_query || 'N/A'}</p>
+<p><strong>AI Description:</strong> ${data.ai_description || 'N/A'}</p>
+<div class="mt-4 flex justify-center">
+    <img src="${data.imageUrl}" alt="Sample Image" class="max-w-full h-auto rounded-lg shadow-md" style="max-height: 200px; object-fit: contain;">
+</div>
+            `.trim();
+        }
+
+        // Helper function for Video Understanding (conceptual)
+        function formatVideoUnderstandingResponse(data) {
+            return `
+<h3>📹 Video Understanding (Conceptual)</h3>
+<p><strong>User Query:</strong> ${data.user_query || 'N/A'}</p>
+<p>${data.explanation || 'N/A'}</p>
+<div class="mt-4 flex justify-center">
+    <div class="video-placeholder">
+        <!-- Simple Play Button SVG -->
+        <svg viewBox="0 0 24 24" fill="white">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+    </div>
+</div>
+<p class="text-sm text-gray-500 mt-4"><em>(Note: Real-time video analysis is resource-intensive for a web demo, but possible with the underlying GenAI models. Click the play button for visual representation.)</em></p>
+            `.trim();
+        }
+
+        // Helper function for Google Search
+        function formatGoogleSearchResponse(data) {
+            return `
+<h3>🌐 Google Search Results</h3>
+<p><strong>Search Query:</strong> ${data.search_query || 'N/A'}</p>
+<p><strong>Simulated Snippet:</strong> ${data.simulated_result || 'N/A'}</p>
+<p class="text-sm text-gray-600 mt-2"><strong>Source:</strong> ${data.simulated_source || 'Simulated Data'}</p>
+            `.trim();
+        }
+
+
         const demoResponses = {
             cbt: {
                 title: "User Input: 'I feel like I always mess things up.'",
-                response: `{
-  "original_thought": "I always mess things up.",
-  "thought_distortion": "Overgeneralization",
-  "challenge": "Always? Can you think of one time you succeeded?",
-  "balanced_thought": "I have made mistakes, but I have also succeeded before. This one event does not define my worth."
-}`
+                response: {
+                    "original_thought": "I always mess things up.",
+                    "thought_distortion": "Overgeneralization",
+                    "challenge": "Always? Can you think of one time you succeeded?",
+                    "balanced_thought": "I have made mistakes, but I have also succeeded before. This one event does not define my worth."
+                },
+                formatter: formatCBTResponse
             },
             habit: {
                 title: "User Input: 'I want to improve my focus and reduce screen time.'",
-                response: `{
-  "habit_goal": "Improve focus and reduce screen time",
-  "habit_loop": {
-    "cue": "Feeling distracted or bored while working.",
-    "routine": "Close social media tabs and listen to a focus playlist for 15 minutes.",
-    "reward": "A sense of accomplishment and clarity."
-  },
-  "tracking_tip": "Use a simple checklist to mark each successful focus session."
-}`
+                response: {
+                    "habit_goal": "Improve focus and reduce screen time",
+                    "habit_loop": {
+                        "cue": "Feeling distracted or bored while working.",
+                        "routine": "Close social media tabs and listen to a focus playlist for 15 minutes.",
+                        "reward": "A sense of accomplishment and clarity."
+                    },
+                    "tracking_tip": "Use a simple checklist to mark each successful focus session."
+                },
+                formatter: formatHabitResponse
             },
             spiritual: {
                 title: "User Input: 'I'm feeling lost and without purpose.'",
-                response: `{
-  "identified_state": "Feeling of aimlessness and a desire for purpose.",
-  "spiritual_source": "Bhagavad Gita, 2.47",
-  "relevant_insight": "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन। (karmaṇy-evādhikāras te mā phaleṣu kadācana) - You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions.",
-  "interpretation": "Find purpose not in the outcome, but in the dedication and integrity of your present actions.",
-  "daily_mantra": "My purpose is in my effort, not the result."
-}`
+                response: {
+                    "identified_state": "Feeling of aimlessness and a desire for purpose.",
+                    "spiritual_source": "Bhagavad Gita, 2.47",
+                    "relevant_insight": "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन। (karmaṇy-evādhikāras te mā phaleṣu kadācana) - You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions.",
+                    "interpretation": "Find purpose not in the outcome, but in the dedication and integrity of your present actions.",
+                    "daily_mantra": "My purpose is in my effort, not the result."
+                },
+                formatter: formatSpiritualResponse
+            },
+            journal: {
+                title: "User Input: 'Analyze my journal entry: Woke up early, made coffee, read. Feeling neutral, just a typical Tuesday.'",
+                response: {
+                    "main_themes": ["Routine", "Mindfulness", "Daily life"],
+                    "emotional_tone": "Neutral",
+                    "potential_cognitive_distortions": [],
+                    "suggested_reframing": "Instead of viewing it as 'just a typical Tuesday,' appreciate the calmness and opportunity for a productive day.",
+                    "actionable_insights": [
+                        "Practice gratitude by focusing on the positive aspects of the quiet morning.",
+                        "Reflect on what constitutes a 'typical' day and whether that aligns with your values."
+                    ]
+                },
+                formatter: formatJournalAnalysisResponse
+            },
+            image: {
+                title: "User Input: 'Describe this image.'",
+                response: {
+                    "user_query": "Describe this image.",
+                    "ai_description": "The image shows a person meditating peacefully in a natural setting, possibly a garden or a quiet room. Their posture is calm, suggesting deep concentration and inner peace. The colors are soft, contributing to a tranquil atmosphere.",
+                    "imageUrl": "https://placehold.co/300x200/FBBF24/FFFFFF?text=Meditating+Person" // Placeholder image for meditation
+                },
+                formatter: formatImageUnderstandingResponse
+            },
+            video: {
+                title: "User Input: 'How does video understanding work?'",
+                response: {
+                    "user_query": "How does video understanding work?",
+                    "explanation": `Video understanding is a powerful feature of ChetnaShakti, allowing it to analyze emotions, actions, and themes from video inputs. In a full production system, this would involve:
+1.  **Video Upload/Streaming:** Users could upload video files or connect live streams.
+2.  **Frame Extraction & Audio Transcription:** Key frames would be extracted, and audio tracks would be transcribed.
+3.  **Multimodal AI Processing:** These visual and textual inputs would be fed to a sophisticated multimodal AI model (like Gemini) capable of understanding complex temporal and contextual information.
+4.  **Insight Generation:** The AI would then generate insights on emotional states, behavioral patterns, or specific events within the video.`
+                },
+                formatter: formatVideoUnderstandingResponse
+            },
+            search: {
+                title: "User Input: 'Search for benefits of mindfulness.'",
+                response: {
+                    "search_query": "benefits of mindfulness",
+                    "simulated_result": "Mindfulness meditation offers numerous benefits, including reduced stress and anxiety, improved emotional regulation, enhanced self-awareness, better focus and concentration, and increased compassion. Regular practice can lead to a greater sense of well-being and a more positive outlook on life.",
+                    "simulated_source": "Psychology Today / Mayo Clinic"
+                },
+                formatter: formatGoogleSearchResponse
             }
         };
 
@@ -421,13 +624,15 @@
             const outputDiv = document.getElementById('demo-output');
             const data = demoResponses[type];
 
+            // Format the response using the appropriate formatter function
+            const formattedResponse = data.formatter(data.response);
+
             outputDiv.innerHTML = `
                 <div class="mb-4">
                     <p class="font-semibold text-stone-700">${data.title}</p>
                 </div>
-                <div class="bg-stone-800 text-green-300 font-mono text-sm p-4 rounded-md agent-response">
-                    <p class="text-gray-400">// AI Agent Response:</p>
-                    ${data.response}
+                <div class="agent-response">
+                    ${formattedResponse}
                 </div>
             `;
         }
