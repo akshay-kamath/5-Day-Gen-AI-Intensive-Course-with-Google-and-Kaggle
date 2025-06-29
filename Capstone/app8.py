@@ -885,7 +885,7 @@ if user_input:
                         st.caption("Was this helpful?")
 
         # After processing, ensure the chat display scrolls to the bottom
-        st.experimental_fragment_rerun() # Use fragment rerun if available for smoother scroll
+        st.rerun() # Use fragment rerun if available for smoother scroll
 
 # --- Gen AI Evaluation Section (from Notebook - Exact Content) ---
 st.markdown("---")
